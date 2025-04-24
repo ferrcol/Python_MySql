@@ -51,7 +51,7 @@ class CostumerDAO:
 
 
 if __name__ == "__main__":
-    costumer1 = Costumer(first_name="Alex", last_name="Kurk", membership=250)
+    costumer1 = Costumer(first_name="Clau", last_name="Smith", membership=255)
     insert_costumers = CostumerDAO.insert(costumer1)
     print(f"Inserted costumers: {insert_costumers}")
 
