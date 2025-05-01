@@ -13,7 +13,7 @@ while option != 5:
           3 . Edit Costumer
           4 . Delete costumer
           5 . Exit''')
-    option = int(input("elect one option: "))
+    option = int(input("Select one option: "))
     if option == 1:
         costumers = CostumerDAO.select()
         print("\n --- Gym Costumer List ---")
