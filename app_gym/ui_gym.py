@@ -33,7 +33,27 @@ class App(tk.Tk):
         label.grid(row=0, column=0, columnspan=2, pady=20)
 
     def show_form(self):
-        pass
+        self.frame_form = ttk.Frame()
+
+        #first name
+        first_name_label = ttk.Label(self.frame_form, text="First Name: ")
+        first_name_label.grid(row=0, column=0, sticky=tk.W, pady = 30, padx=5)
+        self.fist_name_t = ttk.Entry(self.frame_form)
+        self.fist_name_t.grid(row=0, column=1)
+
+        #Last name
+        last_name_label = ttk.Label(self.frame_form, text="Last Name: ")
+        last_name_label.grid(row=1, column=0, sticky=tk.W, pady = 30, padx=5)
+        self.last_name_t = ttk.Entry(self.frame_form)
+        self.last_name_t.grid(row=1, column=1)
+
+        #Mambership
+        membership_label = ttk.Label(self.frame_form, text="Mambership ")
+        membership_label.grid(row=2, column=0, sticky=tk.W, pady = 30, padx=5)
+        self.membership_t = ttk.Entry(self.frame_form)
+        self.membership_t.grid(row=2, column=1)
+
+        self.frame_form.grid(row=1, column=0)
 
     def show_table(self):
         self.frame_table = ttk.Frame(self)
