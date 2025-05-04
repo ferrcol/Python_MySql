@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter.messagebox import showerror
 
 from costumer_dao import CostumerDAO
 
@@ -14,6 +15,7 @@ class App(tk.Tk):
         self.show_title()
         self.show_form()
         self.show_table()
+        self.show_buttons()
 
     def windows_config(self):
         self.geometry("900x600")
@@ -30,7 +32,7 @@ class App(tk.Tk):
 
     def show_title(self):
         label = ttk.Label(self, text="Users Gym Manager", font=("Times New Roman", 25), background=App.WINDOWS_COLOR, foreground="white")
-        label.grid(row=0, column=0, columnspan=2, pady=20)
+        label.grid(row=0, column=0, columnspan=3, pady=30)
 
     def show_form(self):
         self.frame_form = ttk.Frame()
@@ -38,8 +40,8 @@ class App(tk.Tk):
         #first name
         first_name_label = ttk.Label(self.frame_form, text="First Name: ")
         first_name_label.grid(row=0, column=0, sticky=tk.W, pady = 30, padx=5)
-        self.fist_name_t = ttk.Entry(self.frame_form)
-        self.fist_name_t.grid(row=0, column=1)
+        self.first_name_t = ttk.Entry(self.frame_form)
+        self.first_name_t.grid(row=0, column=1)
 
         #Last name
         last_name_label = ttk.Label(self.frame_form, text="Last Name: ")
@@ -82,6 +84,54 @@ class App(tk.Tk):
         self.table.grid(row=0,column=0)
 
         self.frame_table.grid(row=1,column=2, padx=20)
+
+    def show_buttons(self):
+        self.frame_buttons = ttk.Frame()
+
+        add_button = ttk.Button(self.frame_buttons, text="Save", command=self.validate_costumer)
+        add_button.grid(row=0,column=0,padx=30)
+
+        delete_button = ttk.Button(self.frame_buttons, text="Delete", command=self.delete_costumer)
+        delete_button.grid(row=0,column=1,padx=30)
+        
+        clean_button = ttk.Button(self.frame_buttons, text="Clean", command=self.clean_fields)
+        clean_button.grid(row=0,column=2,padx=30)
+
+        self.styles.configure("TButton", background = "#005f73")
+        self.styles.map("TButton", background = [("active", "#0a9396")])
+
+        self.frame_buttons.grid(row=2,column=0, columnspan=3, pady=20)
+
+    def validate_costumer(self):
+        if(self.first_name_t.get() and self.last_name_t.get() and self.membership_t.get()):
+            if self.num_membership():
+                self.save_costumer()
+            else:
+                showerror(title="Attention", message= "Membership should be a valid number")
+                self.membership_t.delete(0, tk.END)
+                
+        else:
+            showerror(title="Attention", message= "All the values need to be complete")
+            self.first_name_t.focus_set()
+
+        
+
+    def num_membership(self):
+        try:
+            int(self.membership_t.get())
+            return True
+        except:
+            return False
+
+    def save_costumer(self):
+        pass
+
+    def delete_costumer(self):
+        pass
+
+    def clean_fields(self):
+        pass
+
 
 
 
