@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter.messagebox import showerror
+from tkinter.messagebox import showerror, showinfo
+from costumer import Costumer
 
 from costumer_dao import CostumerDAO
 
@@ -10,6 +11,7 @@ class App(tk.Tk):
 
     def __init__(self):
         super().__init__()
+        self.id_costumer = None
         self.windows_config()
         self.grid_config()
         self.show_title()
@@ -81,6 +83,8 @@ class App(tk.Tk):
         self.table.configure(yscroll = scrollbar.set)
         scrollbar.grid(row=0, column=1, sticky=tk.NS)
 
+        self.table.bind("<<TreeviewSelect>>", self.load_costumer)
+
         self.table.grid(row=0,column=0)
 
         self.frame_table.grid(row=1,column=2, padx=20)
@@ -114,7 +118,6 @@ class App(tk.Tk):
             showerror(title="Attention", message= "All the values need to be complete")
             self.first_name_t.focus_set()
 
-        
 
     def num_membership(self):
         try:
@@ -124,13 +127,58 @@ class App(tk.Tk):
             return False
 
     def save_costumer(self):
-        pass
+        first_name = self.first_name_t.get()
+        last_name = self.last_name_t.get()
+        membership = self.membership_t.get()
+
+        if self.id_costumer is None:
+            costumer = Costumer(first_name=first_name, last_name=last_name, membership=membership)
+            CostumerDAO.insert(costumer)
+            showinfo(title="Add", message="Costumer added") 
+        else:
+            costumer = Costumer(self.id_costumer, first_name, last_name, membership)
+            CostumerDAO.update(costumer)
+            showinfo(title="Update", message="Costumer updated") 
+
+        self.reload_info()
+
+    def load_costumer(self, event):
+        selected_element = self.table.selection()[0]
+        element = self.table.item(selected_element)
+        costumer_t = element ["values"]
+        self.id_costumer = costumer_t[0]
+        first_name = costumer_t[1]
+        last_name = costumer_t[2]
+        membership = costumer_t[3]
+        
+        self.clean_form()
+        self.first_name_t.insert(0, first_name)
+        self.last_name_t.insert(0, last_name)
+        self.membership_t.insert(0, membership)
+
+    
+    def reload_info(self):
+        self.show_table()
+        self.clean_fields()
 
     def delete_costumer(self):
-        pass
+        if self.id_costumer is None:
+            showerror(title="Attention", message="A costumer shoud be selected")
+        else:
+            costumer = Costumer(id=self.id_costumer)
+            CostumerDAO.delete(costumer)
+            showinfo(title="Deleted", message="Costumer deleted")
+            self.reload_info()
 
     def clean_fields(self):
-        pass
+        self.clean_form()
+        self.id_costumer = None
+
+    def clean_form(self):
+        self.first_name_t.delete(0, tk.END)
+        self.last_name_t.delete(0, tk.END)
+        self.membership_t.delete(0, tk.END)
+
 
 
 
